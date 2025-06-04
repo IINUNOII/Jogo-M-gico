@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Ficha de Português - 26 a 30 de maio</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f0f8ff;
+}
+header {
+    background: #4a90e2;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+#content {
+    padding: 80px 20px 20px;
+    max-width: 600px;
+    margin: auto;
+}
+.question {
+    display: none;
+}
+.buttons {
+    margin-top: 20px;
+}
+button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 5px;
+}
+progress {
+    width: 100%;
+    height: 20px;
+}
+.result {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+<header>
+    <h1>📚 Ficha de Português - 26 a 30 de maio</h1>
+    <progress id="prog" value="0" max="5"></progress>
+</header>
+<div id="content">
+    <div id="page0" class="question" style="display:block;">
+        <h2>Qual é o teu nome?</h2>
+        <input type="text" id="nome" placeholder="Escreve o teu nome" style="width:100%;padding:8px;font-size:16px;">
+        <div class="buttons">
+            <button onclick="next()">Avançar ➡️</button>
+        </div>
+    </div>
+    <div id="page1" class="question">
+        <h2>1️⃣ Qual é o plural de "cão"?</h2>
+        <label><input type="radio" name="q1" value="A"> cãoz</label><br>
+        <label><input type="radio" name="q1" value="B"> cães</label><br>
+        <label><input type="radio" name="q1" value="C"> cãos</label><br>
+        <label><input type="radio" name="q1" value="D"> caes</label><br>
+        <div class="buttons">
+            <button onclick="prev()">⬅️ Recuar</button>
+            <button onclick="next()">Avançar ➡️</button>
+        </div>
+    </div>
+    <div id="page2" class="question">
+        <h2>2️⃣ Seleciona a frase no passado:</h2>
+        <label><input type="radio" name="q2" value="A"> Eu jogo bola.</label><br>
+        <label><input type="radio" name="q2" value="B"> Eu joguei bola.</label><br>
+        <label><input type="radio" name="q2" value="C"> Eu vou jogar bola.</label><br>
+        <div class="buttons">
+            <button onclick="prev()">⬅️ Recuar</button>
+            <button onclick="next()">Avançar ➡️</button>
+        </div>
+    </div>
+    <div id="page3" class="question">
+        <h2>3️⃣ Completa: "A ______ está bonita."</h2>
+        <label><input type="radio" name="q3" value="A"> flor</label><br>
+        <label><input type="radio" name="q3" value="B"> flores</label><br>
+        <label><input type="radio" name="q3" value="C"> flôr</label><br>
+        <label><input type="radio" name="q3" value="D"> flors</label><br>
+        <div class="buttons">
+            <button onclick="prev()">⬅️ Recuar</button>
+            <button onclick="next()">Avançar ➡️</button>
+        </div>
+    </div>
+    <div id="page4" class="question">
+        <h2>4️⃣ Qual destas frases está no futuro?</h2>
+        <label><input type="radio" name="q4" value="A"> Eu estudo.</label><br>
+        <label><input type="radio" name="q4" value="B"> Eu estudei.</label><br>
+        <label><input type="radio" name="q4" value="C"> Eu estudarei.</label><br>
+        <div class="buttons">
+            <button onclick="prev()">⬅️ Recuar</button>
+            <button onclick="finish()">Concluir ✅</button>
+        </div>
+    </div>
+    <div id="result" class="question">
+        <p class="result" id="score"></p>
+        <p id="codigo" class="result"></p>
+    </div>
+</div>
+<script>
+let current=0;
+const total=5; // including name page
+const answers={};
+const correct={q1:'B',q2:'B',q3:'A',q4:'C'};
+function showPage(n){
+    document.querySelectorAll('.question').forEach((el,i)=>{
+        el.style.display=i===n? 'block':'none';
+    });
+    document.getElementById('prog').value=n;
+}
+function next(){
+    if(current<4){current++;}
+    showPage(current);
+}
+function prev(){
+    if(current>0){current--;}
+    showPage(current);
+}
+function finish(){
+    const nome=document.getElementById('nome').value.trim();
+    if(!nome){alert('Escreve o teu nome.');showPage(0);current=0;return;}
+    answers.q1=document.querySelector('input[name="q1"]:checked')?.value;
+    answers.q2=document.querySelector('input[name="q2"]:checked')?.value;
+    answers.q3=document.querySelector('input[name="q3"]:checked')?.value;
+    answers.q4=document.querySelector('input[name="q4"]:checked')?.value;
+    let sc=0;
+    ['q1','q2','q3','q4'].forEach(q=>{if(answers[q]===correct[q]) sc+=25;});
+    const code=genCode();
+    const data={nome:nome,score:sc,date:new Date().toLocaleString()};
+    localStorage.setItem('ficha1-'+code,JSON.stringify(data));
+    document.getElementById('score').textContent=`Pontuação: ${sc}/100`;
+    document.getElementById('codigo').textContent=`Código: ${code}`;
+    showPage(5);
+}
+function genCode(){
+    const letters='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let code='';
+    for(let i=0;i<2;i++) code+=letters.charAt(Math.floor(Math.random()*letters.length));
+    code+=Math.floor(Math.random()*10);
+    code+=Math.floor(Math.random()*10);
+    return code;
+}
+showPage(0);
+</script>
+</body>
+</html>
