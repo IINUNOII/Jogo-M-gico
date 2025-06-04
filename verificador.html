@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Verificador de Ficha</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f0f8ff;
+    padding:20px;
+}
+input,button{
+    padding:10px;
+    font-size:16px;
+    margin:5px;
+}
+#lista{
+    margin-top:20px;
+}
+</style>
+</head>
+<body>
+<h1>Verificador de Código</h1>
+<input type="text" id="codigo" placeholder="Introduz o código" />
+<button onclick="verificar()">Verificar</button>
+<p id="info"></p>
+<h2>Alunos registados</h2>
+<ul id="lista"></ul>
+<script>
+function verificar(){
+    const c=document.getElementById('codigo').value.trim();
+    const dados=localStorage.getItem('ficha1-'+c);
+    if(dados){
+        const obj=JSON.parse(dados);
+        document.getElementById('info').textContent=`${obj.nome} - ${obj.score}/100 - ${obj.date}`;
+    }else{
+        document.getElementById('info').textContent='Código inválido';
+    }
+    listar();
+}
+function listar(){
+    const ul=document.getElementById('lista');
+    ul.innerHTML='';
+    for(let i=0;i<localStorage.length;i++){
+        const k=localStorage.key(i);
+        if(k.startsWith('ficha1-')){
+            const obj=JSON.parse(localStorage.getItem(k));
+            const li=document.createElement('li');
+            li.textContent=`${k.replace('ficha1-','')}: ${obj.nome} - ${obj.score}/100 - ${obj.date}`;
+            ul.appendChild(li);
+        }
+    }
+}
+listar();
+</script>
+</body>
+</html>
