@@ -239,6 +239,26 @@
       color: #666;
     }
 
+    .share-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      text-align: center;
+      background: #fff9f1;
+      border: 2px dashed #ffd3a1;
+    }
+
+    .share-card button {
+      background: var(--pink);
+      box-shadow: 0 8px 16px rgba(255, 111, 181, 0.25);
+    }
+
+    .share-link {
+      font-weight: 700;
+      word-break: break-all;
+    }
+
     @media (max-width: 600px) {
       body {
         padding-top: 110px;
@@ -275,6 +295,13 @@
           uma figura, e a área é o espaço que ela ocupa. Usa estas pistas para resolveres as questões
           da ficha. Boa aventura! 🚀
         </p>
+      </div>
+      <div class="card share-card">
+        <h3>🔗 Link para partilhar com os colegas</h3>
+        <p>Partilha este endereço com o(a) professor(a) ou colegas:</p>
+        <div class="share-link" id="shareLink">A carregar...</div>
+        <button type="button" id="copyLinkBtn">Copiar link 📋</button>
+        <span class="footer-note" id="copyStatus" role="status"></span>
       </div>
       <div class="nav-buttons">
         <button class="secondary" disabled>Recuar</button>
@@ -469,6 +496,9 @@
     const progressBar = document.getElementById('progressBar');
     const studentNameInput = document.getElementById('studentName');
     const finishBtn = document.getElementById('finishBtn');
+    const shareLink = document.getElementById('shareLink');
+    const copyLinkBtn = document.getElementById('copyLinkBtn');
+    const copyStatus = document.getElementById('copyStatus');
 
     let currentPage = 0;
 
@@ -593,8 +623,25 @@
       saveRecord({ name, score, code, date });
     });
 
+    const updateShareLink = () => {
+      shareLink.textContent = window.location.href;
+    };
+
+    copyLinkBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        copyStatus.textContent = 'Link copiado! ✅';
+      } catch (error) {
+        copyStatus.textContent = 'Não foi possível copiar automaticamente. Seleciona e copia o link.';
+      }
+      setTimeout(() => {
+        copyStatus.textContent = '';
+      }, 2500);
+    });
+
     attachNavigation();
     updateProgress();
+    updateShareLink();
   </script>
 </body>
 </html>
