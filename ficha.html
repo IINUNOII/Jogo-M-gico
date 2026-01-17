@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ficha de Trabalho de Matemática</title>
+  <style>
+    :root {
+      --purple: #6f4cf3;
+      --blue: #2ec4ff;
+      --green: #3ad29f;
+      --yellow: #ffd166;
+      --pink: #ff6fb5;
+      --dark: #2f2f3a;
+      --light: #f7f7ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #f0f8ff, #ffe3f1 45%, #e6f7ff);
+      color: var(--dark);
+      padding-top: 90px;
+    }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 8px 20px rgba(32, 32, 64, 0.12);
+      padding: 12px 18px;
+      z-index: 10;
+    }
+
+    .top-bar h1 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .progress-wrapper {
+      margin-top: 8px;
+      background: #e9e9f4;
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--purple), var(--blue), var(--green));
+      transition: width 0.3s ease;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .page {
+      display: none;
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 15px 30px rgba(31, 33, 73, 0.15);
+      margin-bottom: 20px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .card {
+      background: #f8f9ff;
+      border-radius: 18px;
+      padding: 16px;
+      margin: 14px 0;
+      border: 2px dashed #d7d9ff;
+    }
+
+    .name-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .name-field input {
+      padding: 12px;
+      border-radius: 14px;
+      border: 2px solid #d9dbff;
+      font-size: 16px;
+    }
+
+    .question {
+      margin: 18px 0;
+      padding: 14px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid #f1f1f8;
+    }
+
+    .question h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .question input[type="text"],
+    .question input[type="number"],
+    .question select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #c9ccff;
+      font-size: 16px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+
+    .emoji {
+      font-size: 24px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 999px;
+      background: var(--purple);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 16px rgba(111, 76, 243, 0.25);
+    }
+
+    button.secondary {
+      background: #e4e6ff;
+      color: var(--dark);
+      box-shadow: none;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff5db;
+      font-weight: 700;
+    }
+
+    .shape-box {
+      width: 70px;
+      height: 70px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+    }
+
+    .shape-square {
+      background: #7b8cff;
+    }
+
+    .shape-rectangle {
+      background: #ff9b9b;
+    }
+
+    .shape-circle {
+      background: #3ad29f;
+      border-radius: 50%;
+    }
+
+    .result-box {
+      background: #ecfff5;
+      border: 2px solid #9ee7c5;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .code {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: 6px;
+      color: var(--purple);
+    }
+
+    .footer-note {
+      font-size: 13px;
+      color: #666;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding-top: 110px;
+      }
+
+      .top-bar h1 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <h1>📘 Ficha de Trabalho de Matemática</h1>
+    <div class="progress-wrapper" aria-label="Barra de progressão">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page active" data-page="0">
+      <h2>Bem-vindo, explorador(a) dos números! 🌟</h2>
+      <div class="card">
+        <div class="name-field">
+          <label for="studentName">✍️ Escreve o teu nome completo:</label>
+          <input id="studentName" type="text" placeholder="Ex: Maria Silva" />
+        </div>
+      </div>
+      <div class="card">
+        <h3>📖 Texto de apoio</h3>
+        <p>
+          Uma sequência é uma lista que cresce seguindo uma regra. Se adicionarmos sempre o mesmo
+          número, dizemos que cresce por “saltos iguais”. O perímetro é a soma de todos os lados de
+          uma figura, e a área é o espaço que ela ocupa. Usa estas pistas para resolveres as questões
+          da ficha. Boa aventura! 🚀
+        </p>
+      </div>
+      <div class="nav-buttons">
+        <button class="secondary" disabled>Recuar</button>
+        <button class="next-btn">Avançar ➡️</button>
+      </div>
+    </section>
+
+    <section class="page" data-page="1">
+      <h2>Parte 1: Sequências divertidas 🔢</h2>
+
+      <div class="question" data-question="q1">
+        <h3>1) Escolha múltipla (10 pontos)</h3>
+        <p>Qual é o número que falta na sequência 2, 4, 6, 8, ?</p>
+        <div class="options">
+          <label><input type="radio" name="q1" value="a" /> 9</label>
+          <label><input type="radio" name="q1" value="b" /> 10</label>
+          <label><input type="radio" name="q1" value="c" /> 12</label>
+        </div>
+      </div>
+
+      <div class="question" data-question="q2">
+        <h3>2) Resposta curta (10 pontos)</h3>
+        <p>Cada figura tem mais 3 quadrados do que a anterior. Se a figura 1 tem 4 quadrados, quantos terá a figura 4?</p>
+        <input type="number" id="q2" placeholder="Resposta" />
+      </div>
+
+      <div class="question" data-question="q3">
+        <h3>3) Preenche os espaços (10 pontos)</h3>
+        <p>Se o comprimento é 5 cm e a largura é 3 cm, o perímetro é <strong>__</strong> cm e a área é <strong>__</strong> cm².</p>
+        <div class="grid two">
+          <input type="number" id="q3a" placeholder="Perímetro" />
+          <input type="number" id="q3b" placeholder="Área" />
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="prev-btn secondary">⬅️ Recuar</button>
+        <button class="next-btn">Avançar ➡️</button>
+      </div>
+    </section>
+
+    <section class="page" data-page="2">
+      <h2>Parte 2: Ligações mágicas 🧩</h2>
+
+      <div class="question" data-question="q4">
+        <h3>4) Liga a palavra ao desenho (10 pontos)</h3>
+        <p>Escolhe o nome correto para cada forma.</p>
+        <div class="grid two">
+          <div>
+            <div class="shape-box shape-square">⬛</div>
+            <select id="q4a">
+              <option value="">Seleciona</option>
+              <option value="quadrado">Quadrado</option>
+              <option value="retangulo">Retângulo</option>
+              <option value="circulo">Círculo</option>
+            </select>
+          </div>
+          <div>
+            <div class="shape-box shape-rectangle">▭</div>
+            <select id="q4b">
+              <option value="">Seleciona</option>
+              <option value="quadrado">Quadrado</option>
+              <option value="retangulo">Retângulo</option>
+              <option value="circulo">Círculo</option>
+            </select>
+          </div>
+          <div>
+            <div class="shape-box shape-circle">●</div>
+            <select id="q4c">
+              <option value="">Seleciona</option>
+              <option value="quadrado">Quadrado</option>
+              <option value="retangulo">Retângulo</option>
+              <option value="circulo">Círculo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="question" data-question="q5">
+        <h3>5) Escolha múltipla (10 pontos)</h3>
+        <p>Qual é a fração que representa metade de uma pizza?</p>
+        <div class="options">
+          <label><input type="radio" name="q5" value="a" /> 1/4</label>
+          <label><input type="radio" name="q5" value="b" /> 1/2</label>
+          <label><input type="radio" name="q5" value="c" /> 2/3</label>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="prev-btn secondary">⬅️ Recuar</button>
+        <button class="next-btn">Avançar ➡️</button>
+      </div>
+    </section>
+
+    <section class="page" data-page="3">
+      <h2>Parte 3: Conta e escolhe 💡</h2>
+
+      <div class="question" data-question="q6">
+        <h3>6) Resposta curta (10 pontos)</h3>
+        <p>Quanto é 7 × 6?</p>
+        <input type="number" id="q6" placeholder="Resposta" />
+      </div>
+
+      <div class="question" data-question="q7">
+        <h3>7) Preenche o espaço (10 pontos)</h3>
+        <p>Completa: 5, 10, 15, <strong>__</strong>, 25</p>
+        <input type="number" id="q7" placeholder="Resposta" />
+      </div>
+
+      <div class="question" data-question="q8">
+        <h3>8) Liga a expressão ao resultado (10 pontos)</h3>
+        <div class="grid two">
+          <div>
+            <p><strong>3 + 9</strong></p>
+            <select id="q8a">
+              <option value="">Seleciona</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+          <div>
+            <p><strong>20 - 6</strong></p>
+            <select id="q8b">
+              <option value="">Seleciona</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+          <div>
+            <p><strong>6 + 12</strong></p>
+            <select id="q8c">
+              <option value="">Seleciona</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="18">18</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="prev-btn secondary">⬅️ Recuar</button>
+        <button class="next-btn">Avançar ➡️</button>
+      </div>
+    </section>
+
+    <section class="page" data-page="4">
+      <h2>Parte 4: Verdadeiro ou falso ✅❌</h2>
+
+      <div class="question" data-question="q9">
+        <h3>9) Verdadeiro ou falso (10 pontos)</h3>
+        <p>O número 0 é par.</p>
+        <div class="options">
+          <label><input type="radio" name="q9" value="true" /> Verdadeiro</label>
+          <label><input type="radio" name="q9" value="false" /> Falso</label>
+        </div>
+      </div>
+
+      <div class="question" data-question="q10">
+        <h3>10) Resposta curta (10 pontos)</h3>
+        <p>Completa: 36, 30, 24, <strong>__</strong></p>
+        <input type="number" id="q10" placeholder="Resposta" />
+      </div>
+
+      <div class="nav-buttons">
+        <button class="prev-btn secondary">⬅️ Recuar</button>
+        <button class="next-btn">Avançar ➡️</button>
+      </div>
+    </section>
+
+    <section class="page" data-page="5">
+      <h2>🎉 Final da ficha</h2>
+      <p>Quando terminares, clica em “Calcular pontuação” para saberes a tua nota e receberes o código.</p>
+      <div class="result-box">
+        <div class="badge">⭐ Total: <span id="scoreValue">0</span> / 100</div>
+        <div>Nome do aluno: <strong id="studentNameResult">---</strong></div>
+        <div>Código de validação:</div>
+        <div class="code" id="validationCode">---</div>
+        <div class="footer-note">Envia este código ao/à professor(a) como comprovativo.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="prev-btn secondary">⬅️ Recuar</button>
+        <button id="finishBtn">Calcular pontuação ✅</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const pages = Array.from(document.querySelectorAll('.page'));
+    const progressBar = document.getElementById('progressBar');
+    const studentNameInput = document.getElementById('studentName');
+    const finishBtn = document.getElementById('finishBtn');
+
+    let currentPage = 0;
+
+    const scoringRules = [
+      { id: 'q1', type: 'radio', correct: 'b', points: 10 },
+      { id: 'q2', type: 'number', correct: 13, points: 10 },
+      { id: 'q3', type: 'multi', correct: ['16', '15'], points: 10 },
+      { id: 'q4', type: 'multi', correct: ['quadrado', 'retangulo', 'circulo'], points: 10 },
+      { id: 'q5', type: 'radio', correct: 'b', points: 10 },
+      { id: 'q6', type: 'number', correct: 42, points: 10 },
+      { id: 'q7', type: 'number', correct: 20, points: 10 },
+      { id: 'q8', type: 'multi', correct: ['12', '14', '18'], points: 10 },
+      { id: 'q9', type: 'radio', correct: 'true', points: 10 },
+      { id: 'q10', type: 'number', correct: 18, points: 10 }
+    ];
+
+    const updateProgress = () => {
+      const percent = ((currentPage + 1) / pages.length) * 100;
+      progressBar.style.width = `${percent}%`;
+    };
+
+    const showPage = (index) => {
+      pages.forEach(page => page.classList.remove('active'));
+      pages[index].classList.add('active');
+      currentPage = index;
+      updateProgress();
+    };
+
+    const attachNavigation = () => {
+      document.querySelectorAll('.next-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          if (currentPage < pages.length - 1) {
+            showPage(currentPage + 1);
+          }
+        });
+      });
+
+      document.querySelectorAll('.prev-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          if (currentPage > 0) {
+            showPage(currentPage - 1);
+          }
+        });
+      });
+    };
+
+    const normalizeNumber = (value) => (value ?? '').toString().trim();
+
+    const calculateScore = () => {
+      let score = 0;
+
+      scoringRules.forEach(rule => {
+        if (rule.type === 'radio') {
+          const selected = document.querySelector(`input[name="${rule.id}"]:checked`);
+          if (selected && selected.value === rule.correct) {
+            score += rule.points;
+          }
+        }
+
+        if (rule.type === 'number') {
+          const input = document.getElementById(rule.id);
+          if (input && normalizeNumber(input.value) === String(rule.correct)) {
+            score += rule.points;
+          }
+        }
+
+        if (rule.type === 'multi') {
+          const values = rule.correct.map((_, index) => {
+            const suffix = rule.id === 'q3' ? ['a', 'b'][index] : ['a', 'b', 'c'][index];
+            const element = document.getElementById(`${rule.id}${suffix}`);
+            return element ? normalizeNumber(element.value) : '';
+          });
+
+          if (values.every((value, index) => value === rule.correct[index])) {
+            score += rule.points;
+          }
+        }
+      });
+
+      return score;
+    };
+
+    const generateUniqueCode = () => {
+      const records = getRecords();
+      let code = '';
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+      do {
+        code = Array.from({ length: 3 }, () => letters[Math.floor(Math.random() * letters.length)]).join('');
+      } while (records.some(record => record.code === code));
+
+      return code;
+    };
+
+    const getRecords = () => {
+      const stored = localStorage.getItem('ficha-matematica-registos');
+      return stored ? JSON.parse(stored) : [];
+    };
+
+    const saveRecord = (record) => {
+      const records = getRecords();
+      records.push(record);
+      localStorage.setItem('ficha-matematica-registos', JSON.stringify(records));
+    };
+
+    finishBtn.addEventListener('click', () => {
+      const name = studentNameInput.value.trim();
+      if (!name) {
+        alert('Por favor escreve o teu nome antes de terminar.');
+        showPage(0);
+        return;
+      }
+
+      const score = calculateScore();
+      const code = generateUniqueCode();
+      const date = new Date().toLocaleString('pt-PT');
+
+      document.getElementById('scoreValue').textContent = score;
+      document.getElementById('studentNameResult').textContent = name;
+      document.getElementById('validationCode').textContent = code;
+
+      saveRecord({ name, score, code, date });
+    });
+
+    attachNavigation();
+    updateProgress();
+  </script>
+</body>
+</html>
