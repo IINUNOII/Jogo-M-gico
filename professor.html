@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Verificador do Professor</title>
+  <style>
+    body {
+      font-family: "Nunito", "Segoe UI", sans-serif;
+      background: linear-gradient(120deg, #fff7f0, #e6f4ff);
+      margin: 0;
+      padding: 30px 16px;
+      color: #2f2f3a;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 28px rgba(34, 34, 60, 0.12);
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1.5px solid #d2d2ff;
+      font-size: 16px;
+      margin-top: 8px;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: #6f4cf3;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ececff;
+      padding: 10px;
+      text-align: left;
+    }
+
+    .status {
+      font-weight: 700;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>👩‍🏫 Verificador do Professor</h1>
+      <p>Introduza o código de validação enviado pelos alunos.</p>
+      <label for="codeInput">Código</label>
+      <input id="codeInput" type="text" placeholder="Ex: ABC" maxlength="3" />
+      <button id="verifyBtn">Verificar código</button>
+      <p id="status" class="status"></p>
+      <div id="result"></div>
+    </div>
+
+    <div class="card">
+      <h2>📋 Lista de alunos que já responderam</h2>
+      <div id="list"></div>
+      <button id="refreshBtn">Atualizar lista</button>
+    </div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const resultEl = document.getElementById('result');
+    const listEl = document.getElementById('list');
+    const codeInput = document.getElementById('codeInput');
+
+    const getRecords = () => {
+      const stored = localStorage.getItem('ficha-matematica-registos');
+      return stored ? JSON.parse(stored) : [];
+    };
+
+    const renderList = () => {
+      const records = getRecords();
+      if (!records.length) {
+        listEl.innerHTML = '<p>Nenhum aluno registado ainda.</p>';
+        return;
+      }
+
+      listEl.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Código</th>
+              <th>Pontuação</th>
+              <th>Data/Hora</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${records.map(record => `
+              <tr>
+                <td>${record.name}</td>
+                <td>${record.code}</td>
+                <td>${record.score} / 100</td>
+                <td>${record.date}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+    };
+
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+      const code = codeInput.value.trim().toUpperCase();
+      const records = getRecords();
+      const record = records.find(item => item.code === code);
+
+      if (!code) {
+        statusEl.textContent = 'Introduce um código para pesquisar.';
+        statusEl.style.color = '#d35400';
+        resultEl.innerHTML = '';
+        return;
+      }
+
+      if (!record) {
+        statusEl.textContent = 'Código não encontrado.';
+        statusEl.style.color = '#c0392b';
+        resultEl.innerHTML = '';
+        return;
+      }
+
+      statusEl.textContent = 'Código válido ✅';
+      statusEl.style.color = '#27ae60';
+      resultEl.innerHTML = `
+        <p><strong>Aluno:</strong> ${record.name}</p>
+        <p><strong>Pontuação:</strong> ${record.score} / 100</p>
+        <p><strong>Data/Hora:</strong> ${record.date}</p>
+      `;
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', renderList);
+
+    renderList();
+  </script>
+</body>
+</html>
